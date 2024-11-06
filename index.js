@@ -6,5 +6,3 @@ const slider = new CircularSlider({
   step: 1,
   radius: 100
 });
-
-slider.initialize()
