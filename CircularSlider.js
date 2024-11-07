@@ -154,8 +154,17 @@ class CircularSlider {
     const rect = svg.getBoundingClientRect();
     const center = rect.width / 2;
 
-    const x = event.clientX - rect.left - center;
-    const y = event.clientY - rect.top - center;
+    let x;
+    let y;
+    if (event.touches) {
+      // For touch events, use the first touch point
+      x = event.touches[0].clientX - rect.left - center;
+      y = event.touches[0].clientY - rect.top - center;
+    } else {
+      // For mouse events, use clientX and clientY directly
+      x = event.clientX - rect.left - center;
+      y = event.clientY - rect.top - center;
+    }
 
     const angle = Math.atan2(y, x);
 
