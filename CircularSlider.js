@@ -105,6 +105,11 @@ class CircularSlider {
       M ${startX} ${startY} 
       A ${this.options.radius} ${this.options.radius} 0 ${largeArcFlag} 1 ${x} ${y}`;
 
+    // Workaround: progress path not rendered correctly when value === max -> colour track
+    const track = document.getElementById(`${this.options.container}_track`);
+    if (normalizedValue === 1) track.setAttribute("stroke", this.options.color);
+    else track.setAttribute("stroke", '#ddd');
+
     const progress = document.getElementById(`${this.options.container}_progress`);
     progress.setAttribute("d", arcPath);
 
