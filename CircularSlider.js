@@ -1,5 +1,6 @@
 const STROKE_WIDTH = 18;
 const SVG_URL = "http://www.w3.org/2000/svg";
+
 class CircularSlider {
   constructor(options) {
     const defaultOptions = {
@@ -12,6 +13,7 @@ class CircularSlider {
     };
 
     this.options = { ...defaultOptions, ...options };
+    this.value = 0;
 
     this.initialize();
   }
@@ -51,10 +53,31 @@ class CircularSlider {
     svg.appendChild(progress);
     svg.appendChild(handle);
 
-    this.setPosition();
+    this.drawProgressPath();
   }
 
-  setPosition() {
-    
+  drawProgressPath() {
+    const svg = document.getElementById('sliders-svg');
+    const rect = svg.getBoundingClientRect();
+    const center = rect.width / 2;
+
+    const normalizedValue = (this.value - this.options.min) / (this.options.max - this.options.min);
+    const angle = normalizedValue * (2 * Math.PI);
+    const adjustedAngle = angle - (Math.PI / 2);
+
+    const x = center + this.options.radius * Math.cos(adjustedAngle);
+    const y = center + this.options.radius * Math.sin(adjustedAngle);
+
+    const largeArcFlag = this.value > (this.options.max - this.options.min) / 2 ? 1 : 0;
+    const startX = center;
+    const startY = center - this.options.radius;
+
+    // Path that defines a circular arc relative to the center of the SVG
+    const arcPath = `
+      M ${startX} ${startY} 
+      A ${this.options.radius} ${this.options.radius} 0 ${largeArcFlag} 1 ${x} ${y}`;
+
+    const progress = document.getElementById(`${this.options.container}_progress`);
+    progress.setAttribute("d", arcPath);
   }
 }
