@@ -54,11 +54,11 @@ class CircularSlider {
     svg.appendChild(progress);
     svg.appendChild(handle);
 
-    this.drawProgressPath();
+    this.updateProgressPath();
     this.addEventListeners();
   }
 
-  drawProgressPath() {
+  updateProgressPath() {
     const svg = document.getElementById('sliders-svg');
     const rect = svg.getBoundingClientRect();
     const center = rect.width / 2;
@@ -116,6 +116,21 @@ class CircularSlider {
   }
 
   updateValue(event) {
-    
+    const svg = document.getElementById('sliders-svg');
+    const rect = svg.getBoundingClientRect();
+    const center = rect.width / 2;
+
+    const x = event.clientX - rect.left - center;
+    const y = event.clientY - rect.top - center;
+
+    const angle = Math.atan2(y, x);
+
+    const alignedAngleToTop = angle < -Math.PI / 2 ? angle + 2 * Math.PI : angle;
+    const normalizedAngle = (alignedAngleToTop + Math.PI / 2) / (2 * Math.PI);
+    const normalizedValue = normalizedAngle * (this.options.max - this.options.min) + this.options.min;
+
+    this.value = Math.round(normalizedValue / this.options.step) * this.options.step;
+
+    this.updateProgressPath();
   }
 }
