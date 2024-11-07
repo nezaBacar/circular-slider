@@ -14,6 +14,7 @@ class CircularSlider {
 
     this.options = { ...defaultOptions, ...options };
     this.value = 0;
+    this.dragging = false;
 
     this.initialize();
   }
@@ -54,6 +55,7 @@ class CircularSlider {
     svg.appendChild(handle);
 
     this.drawProgressPath();
+    this.addEventListeners();
   }
 
   drawProgressPath() {
@@ -79,5 +81,41 @@ class CircularSlider {
 
     const progress = document.getElementById(`${this.options.container}_progress`);
     progress.setAttribute("d", arcPath);
+  }
+
+  addEventListeners() {
+    const track = document.getElementById(`${this.options.container}_track`);
+    track.addEventListener("mousedown", this.startDrag.bind(this));
+    track.addEventListener("touchstart", this.startDrag.bind(this));
+
+    const progress = document.getElementById(`${this.options.container}_progress`);
+    progress.addEventListener("mousedown", this.startDrag.bind(this));
+    progress.addEventListener("touchstart", this.startDrag.bind(this));
+
+    document.addEventListener("mousemove", this.onDrag.bind(this));
+    document.addEventListener("touchmove", this.onDrag.bind(this));
+    
+    document.addEventListener("mouseup", this.endDrag.bind(this));
+    document.addEventListener("touchend", this.endDrag.bind(this));
+  }
+
+  startDrag(event) {
+    // Stop scrolling while dragging
+    event.preventDefault();
+    this.dragging = true;
+    this.updateValue(event);
+  }
+
+  onDrag(event) {
+    if (this.dragging)
+      this.updateValue(event);
+  }
+
+  endDrag() {
+    this.dragging = false;
+  }
+
+  updateValue(event) {
+    
   }
 }
