@@ -54,8 +54,34 @@ class CircularSlider {
     svg.appendChild(progress);
     svg.appendChild(handle);
 
+    this.createLegendItem();
     this.updatePosition();
     this.addEventListeners();
+  }
+
+  createLegendItem() {
+    const colorBox = document.createElement("div");
+    colorBox.className = "legend-color";
+    colorBox.style.backgroundColor = this.options.color;
+
+    const legendValue = document.createElement("span");
+    legendValue.className = "legend-value";
+    legendValue.id = `${this.options.container}`;
+    legendValue.textContent = `$${this.value}`;
+
+    const legendName = document.createElement("span");
+    legendName.className = "legend-name";
+    legendName.textContent = this.options.container;
+
+    const legendItem = document.createElement("div");
+    legendItem.className = "legend-item";
+
+    legendItem.appendChild(colorBox);
+    legendItem.appendChild(legendName);
+    legendItem.appendChild(legendValue);
+
+    const legendContainer = document.getElementById("legend-container");
+    legendContainer.appendChild(legendItem);
   }
 
   updatePosition() {
@@ -140,5 +166,11 @@ class CircularSlider {
     this.value = Math.round(normalizedValue / this.options.step) * this.options.step;
 
     this.updatePosition();
+    this.updateLegend();
+  }
+
+  updateLegend() {
+    const element = document.querySelector(`.legend-item #${this.options.container}`);
+    element.textContent = `$${this.value}`;
   }
 }
