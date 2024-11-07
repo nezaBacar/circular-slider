@@ -81,6 +81,10 @@ class CircularSlider {
 
     const progress = document.getElementById(`${this.options.container}_progress`);
     progress.setAttribute("d", arcPath);
+
+    const handle = document.getElementById(`${this.options.container}_handle`);
+    handle.setAttribute("cx", x);
+    handle.setAttribute("cy", y);
   }
 
   addEventListeners() {
@@ -91,6 +95,10 @@ class CircularSlider {
     const progress = document.getElementById(`${this.options.container}_progress`);
     progress.addEventListener("mousedown", this.startDrag.bind(this));
     progress.addEventListener("touchstart", this.startDrag.bind(this));
+
+    const handle = document.getElementById(`${this.options.container}_handle`);
+    handle.addEventListener("mousedown", this.startDrag.bind(this));
+    handle.addEventListener("touchstart", this.startDrag.bind(this));
 
     document.addEventListener("mousemove", this.onDrag.bind(this));
     document.addEventListener("touchmove", this.onDrag.bind(this));
